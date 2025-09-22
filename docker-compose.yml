@@ -1,0 +1,28 @@
+services:
+  buildbot:
+    image: buildbot/buildbot-master
+    platform: linux/amd64
+    container_name: bb-controller
+    ports:
+      - "8010:8010"
+      - "9989:9989"
+    volumes:
+      - ./master/master.cfg:/buildbot/master.cfg:ro
+      - ./master:/buildbot
+    restart: unless-stopped
+
+  bb-cpp-worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    container_name: bb-cpp-worker
+    environment:
+      BUILDMASTER: buildbot
+      BUILDMASTER_PORT: 9989
+      WORKERNAME: cpp-worker
+      WORKERPASS: cpp-pass
+    depends_on:
+      - buildbot
+    restart: unless-stopped
+
