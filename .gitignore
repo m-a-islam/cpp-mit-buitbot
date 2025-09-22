@@ -1,3 +1,5 @@
 .idea
-*.log
-*.sqlite
+master/http.log
+master/state.sqlite
+master/twistd.pid
+
